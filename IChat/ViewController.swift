@@ -9,11 +9,37 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        view.backgroundColor = .blue
     }
 
 
+}
+
+
+// MARK: - PreviewProvider
+
+import SwiftUI
+
+struct viewControllerProvider: PreviewProvider {
+    static var previews: some View {
+        ContainerView().edgesIgnoringSafeArea(.all)
+    }
+    
+    struct ContainerView: UIViewControllerRepresentable {
+        
+        let viewController = ViewController()
+        
+        func makeUIViewController(context: Context) -> some UIViewController {
+            return viewController
+        }
+        
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+            
+        }
+    }
 }
 
