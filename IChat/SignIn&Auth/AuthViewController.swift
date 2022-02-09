@@ -74,7 +74,7 @@ extension AuthViewController {
 
 import SwiftUI
 
-struct viewControllerProvider: PreviewProvider {
+struct AuthVCProvider: PreviewProvider {
     static var previews: some View {
         ContainerView().edgesIgnoringSafeArea(.all)
     }

@@ -19,6 +19,12 @@
 		E597C2E427B264560057146D /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2E327B264560057146D /* UIImageView + Extension.swift */; };
 		E597C2EA27B2DC300057146D /* ButtonFromView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2E927B2DC300057146D /* ButtonFromView.swift */; };
 		E597C2EC27B2DEE20057146D /* UIStackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2EB27B2DEE20057146D /* UIStackView + Extension.swift */; };
+		E597C2EE27B2E60E0057146D /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2ED27B2E60E0057146D /* SignUpViewController.swift */; };
+		E597C2F027B326070057146D /* OneLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2EF27B326070057146D /* OneLineTextField.swift */; };
+		E597C2F227B3A6AC0057146D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2F127B3A6AC0057146D /* LoginViewController.swift */; };
+		E597C2F427B3CE730057146D /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2F327B3CE730057146D /* SetupProfileViewController.swift */; };
+		E597C2F627B3CF530057146D /* ChoosePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2F527B3CF530057146D /* ChoosePhotoView.swift */; };
+		E597C2F827B3E5F90057146D /* UISegmentedControl + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C2F727B3E5F90057146D /* UISegmentedControl + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +42,12 @@
 		E597C2E327B264560057146D /* UIImageView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
 		E597C2E927B2DC300057146D /* ButtonFromView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFromView.swift; sourceTree = "<group>"; };
 		E597C2EB27B2DEE20057146D /* UIStackView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Extension.swift"; sourceTree = "<group>"; };
+		E597C2ED27B2E60E0057146D /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		E597C2EF27B326070057146D /* OneLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneLineTextField.swift; sourceTree = "<group>"; };
+		E597C2F127B3A6AC0057146D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		E597C2F327B3CE730057146D /* SetupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewController.swift; sourceTree = "<group>"; };
+		E597C2F527B3CF530057146D /* ChoosePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePhotoView.swift; sourceTree = "<group>"; };
+		E597C2F727B3E5F90057146D /* UISegmentedControl + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentedControl + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +82,7 @@
 			children = (
 				E597C2C727B165D70057146D /* AppDelegate.swift */,
 				E597C2C927B165D70057146D /* SceneDelegate.swift */,
-				E597C2CB27B165D70057146D /* AuthViewController.swift */,
+				E597C2F927B407660057146D /* SignIn&Auth */,
 				E597C2E627B2DB8E0057146D /* Extension */,
 				E597C2D027B165D80057146D /* Assets.xcassets */,
 				E597C2D227B165D80057146D /* LaunchScreen.storyboard */,
@@ -84,6 +96,7 @@
 			children = (
 				E597C2DF27B2611B0057146D /* UIColor + Extension.swift */,
 				E597C2EB27B2DEE20057146D /* UIStackView + Extension.swift */,
+				E597C2F727B3E5F90057146D /* UISegmentedControl + Extension.swift */,
 				E597C2DD27B2603D0057146D /* UIFont + Extension.swift */,
 				E597C2E327B264560057146D /* UIImageView + Extension.swift */,
 				E597C2DB27B256990057146D /* UIButton + Extension.swift */,
@@ -96,9 +109,22 @@
 			isa = PBXGroup;
 			children = (
 				E597C2E927B2DC300057146D /* ButtonFromView.swift */,
+				E597C2F527B3CF530057146D /* ChoosePhotoView.swift */,
+				E597C2EF27B326070057146D /* OneLineTextField.swift */,
 				E597C2E527B2DB840057146D /* UIKit */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		E597C2F927B407660057146D /* SignIn&Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E597C2CB27B165D70057146D /* AuthViewController.swift */,
+				E597C2ED27B2E60E0057146D /* SignUpViewController.swift */,
+				E597C2F127B3A6AC0057146D /* LoginViewController.swift */,
+				E597C2F327B3CE730057146D /* SetupProfileViewController.swift */,
+			);
+			path = "SignIn&Auth";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,13 +199,19 @@
 			files = (
 				E597C2DE27B2603D0057146D /* UIFont + Extension.swift in Sources */,
 				E597C2CC27B165D70057146D /* AuthViewController.swift in Sources */,
+				E597C2F827B3E5F90057146D /* UISegmentedControl + Extension.swift in Sources */,
+				E597C2F627B3CF530057146D /* ChoosePhotoView.swift in Sources */,
 				E597C2C827B165D70057146D /* AppDelegate.swift in Sources */,
 				E597C2E227B263370057146D /* UILabel + Extension.swift in Sources */,
+				E597C2F427B3CE730057146D /* SetupProfileViewController.swift in Sources */,
 				E597C2EA27B2DC300057146D /* ButtonFromView.swift in Sources */,
 				E597C2E427B264560057146D /* UIImageView + Extension.swift in Sources */,
 				E597C2E027B2611B0057146D /* UIColor + Extension.swift in Sources */,
 				E597C2CA27B165D70057146D /* SceneDelegate.swift in Sources */,
 				E597C2DC27B256990057146D /* UIButton + Extension.swift in Sources */,
+				E597C2EE27B2E60E0057146D /* SignUpViewController.swift in Sources */,
+				E597C2F027B326070057146D /* OneLineTextField.swift in Sources */,
+				E597C2F227B3A6AC0057146D /* LoginViewController.swift in Sources */,
 				E597C2EC27B2DEE20057146D /* UIStackView + Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
