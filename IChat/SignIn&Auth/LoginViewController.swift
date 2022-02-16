@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
     private let needAnAccountLabel = UILabel(text: "Need an account?")
     
     private let googleButtom = UIButton(titel: "Google", backgroundColor: .white, titleColor: .buttonDark(), isShadow: true)
-    private let loginButtom = UIButton(titel: "Login", backgroundColor: .buttonDark(), titleColor: .buttonWhite())
+    private let loginButtom = UIButton(titel: "Login", backgroundColor: .buttonDark(), titleColor: .mainWhite())
     private let signUpButtom = UIButton(titel: "Sign Up", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
     
     private let emailTextField = OneLineTextField()

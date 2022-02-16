@@ -18,7 +18,7 @@ class SetupProfileViewController: UIViewController {
     
     private let goButton = UIButton(titel: "Go to chats!",
                                     backgroundColor: .buttonDark(),
-                                    titleColor: .buttonWhite())
+                                    titleColor: .mainWhite())
     
     private let fullNameTextField = OneLineTextField()
     private let aboutMeTextField = OneLineTextField()
