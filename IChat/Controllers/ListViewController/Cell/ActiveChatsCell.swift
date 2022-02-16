@@ -39,14 +39,11 @@ class ActiveChatsCell: UICollectionViewCell, SelfConfiguringCell {
 
 extension ActiveChatsCell {
     
-    func updateCell(data: MChat) {
-        
-        backgroundColor = .orange
-        
+    func updateCell<U>(data: U) where U : Hashable {
+        guard let data = data as? MChat else { fatalError() }
         userImage.image = UIImage(named: data.userImageString)
         userName.text = data.username
         lastMessage.text = data.lastMessage
-        
     }
     
     private func setupConstraints() {

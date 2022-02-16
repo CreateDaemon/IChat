@@ -7,36 +7,21 @@
 
 import UIKit
 
-enum Section: Int, CaseIterable {
-    case waitingChats, activeChats
-    
-    func chootheNameHeader() -> String {
-        switch self {
-        case .waitingChats:
-            return "Waiting chats"
-        case .activeChats:
-            return "Active chats"
-        }
-    }
-}
-
-struct MChat: Hashable, Decodable {
-    var username: String
-    var userImageString: String
-    var lastMessage: String
-    var id: Int
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    static func == (lhs: MChat, rhs: MChat) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
 
 class ListViewController: UIViewController {
+    
+    private enum Section: Int, CaseIterable {
+        case waitingChats, activeChats
+        
+        func description() -> String {
+            switch self {
+            case .waitingChats:
+                return "Waiting chats"
+            case .activeChats:
+                return "Active chats"
+            }
+        }
+    }
     
     private var collectionView: UICollectionView!
     private var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, MChat>?
@@ -93,10 +78,10 @@ extension ListViewController {
             
             switch section {
             case .activeChats:
-                let cell = self.configureCell(cellType: ActiveChatsCell.self, with: itemIdentifier, for: indexPath)
+                let cell = self.configureCell(collectionView: collectionView, cellType: ActiveChatsCell.self, with: itemIdentifier, for: indexPath)
                 return cell
             case .waitingChats:
-                let cell = self.configureCell(cellType: WaitingChatsCell.self, with: itemIdentifier, for: indexPath)
+                let cell = self.configureCell(collectionView: collectionView, cellType: WaitingChatsCell.self, with: itemIdentifier, for: indexPath)
                 return cell
             }
         })
@@ -104,7 +89,7 @@ extension ListViewController {
         collectionViewDataSource?.supplementaryViewProvider = { collectionView, kind, indexPath in
             guard let headerSection = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSection.reuseId, for: indexPath) as? HeaderSection else { fatalError() }
             guard let section = Section(rawValue: indexPath.section) else { fatalError() }
-            headerSection.configure(textHeader: section.chootheNameHeader(), font: .laoSangamMN20(), textColor: .lightGray)
+            headerSection.configure(textHeader: section.description(), font: .laoSangamMN20(), textColor: .lightGray)
             return headerSection
         }
         
@@ -173,12 +158,6 @@ extension ListViewController {
         let hedearSectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                        heightDimension: .estimated(1))
         return NSCollectionLayoutBoundarySupplementaryItem(layoutSize: hedearSectionSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-    }
-    
-    private func configureCell<T: SelfConfiguringCell>(cellType: T.Type, with value: MChat, for indexPath: IndexPath) -> T {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellType.reuseId, for: indexPath) as? T else { fatalError() }
-        cell.updateCell(data: value)
-        return cell
     }
 }
 

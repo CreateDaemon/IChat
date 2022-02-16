@@ -37,10 +37,9 @@ class WaitingChatsCell: UICollectionViewCell, SelfConfiguringCell {
 
 extension WaitingChatsCell {
     
-    func updateCell(data: MChat) {
-        
+    func updateCell<U>(data: U) where U : Hashable {
+        guard let data = data as? MChat else { fatalError() }
         userImage.image = UIImage(named: data.userImageString)
-        
     }
     
     private func setupConstraints() {

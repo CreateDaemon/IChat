@@ -31,12 +31,12 @@ extension MainTabBarController {
         let convImage = UIImage(systemName: "bubble.left.and.bubble.right", withConfiguration: boldConfigImage)!
         
         viewControllers = [
-            setupNavigationBar(rootViewController: listViewControlle,
-                               title: "Conversations",
-                               image: convImage),
             setupNavigationBar(rootViewController: peopleViewController,
                                title: "People",
-                               image: peopleImage)
+                               image: peopleImage),
+            setupNavigationBar(rootViewController: listViewControlle,
+                               title: "Conversations",
+                               image: convImage)
         ]
         
         let appearanceTabBar = UITabBarAppearance()
