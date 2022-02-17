@@ -14,5 +14,14 @@ extension UIViewController {
         cell.updateCell(data: value)
         return cell
     }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let actionButton = UIAlertAction(title: "OK", style: .default)
+        
+        alert.addAction(actionButton)
+        
+        present(alert, animated: true)
+    }
 }
 

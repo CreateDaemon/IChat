@@ -20,7 +20,7 @@ class SignUpViewController: UIViewController {
     let passwordTextField = OneLineTextField()
     let confirmPasswordTextField = OneLineTextField()
     
-    let signInButton = UIButton(titel: "Sign Up", backgroundColor: .buttonDark(), titleColor: .white)
+    let signUpButton = UIButton(titel: "Sign Up", backgroundColor: .buttonDark(), titleColor: .white)
     let loginButton = UIButton(titel: "Login", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
     
     // MARK: - viewDidLoad
@@ -29,6 +29,7 @@ class SignUpViewController: UIViewController {
         
         view.backgroundColor = .white
         setupConstraints()
+        addTargetButtons()
     }
     
 }
@@ -54,7 +55,7 @@ extension SignUpViewController {
         let confirmPasswordSteckView = UIStackView(arrangedSubviews: [confirmPasswordLabel, confirmPasswordTextField],
                                          axis: .vertical,
                                          spacing: 0)
-        let stackView = UIStackView(arrangedSubviews: [emailSteckView, passwordSteckView, confirmPasswordSteckView, signInButton], axis: .vertical, spacing: 40)
+        let stackView = UIStackView(arrangedSubviews: [emailSteckView, passwordSteckView, confirmPasswordSteckView, signUpButton], axis: .vertical, spacing: 40)
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -70,32 +71,29 @@ extension SignUpViewController {
         view.addSubview(footerStackView)
         footerStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            footerStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 40),
+            footerStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 5),
             footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
     }
+    
+    private func addTargetButtons() {
+        signUpButton.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
+    }
 }
 
-// MARK: - PreviewProvider
 
-import SwiftUI
-
-struct SignUpVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
+// MARK: - @objc method
+extension SignUpViewController {
     
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = SignUpViewController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
+    @objc private func signUpButtonPress() {
+        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ class AuthViewController: UIViewController {
                                         backgroundColor: .white,
                                         titleColor: .buttonDark(),
                                         isShadow: true)
-    private let emailButton = UIButton(titel: "Email",
+    @objc private let emailButton = UIButton(titel: "Email",
                                        backgroundColor: .black,
                                        titleColor: .white)
     private let loginButton = UIButton(titel: "Login",
@@ -35,6 +35,7 @@ class AuthViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        addTargetButtons()
     }
     
     
@@ -66,30 +67,24 @@ extension AuthViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
+    }
     
+    private func addTargetButtons() {
+        emailButton.addTarget(self, action: #selector(emailButtonPress), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonPress), for: .touchUpInside)
     }
 }
 
-// MARK: - PreviewProvider
 
-import SwiftUI
-
-struct AuthVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
+// MARK: - @objc method
+extension AuthViewController {
+    
+    @objc private func emailButtonPress() {
+        present(SignUpViewController(), animated: true)
     }
     
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = AuthViewController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
+    @objc private func loginButtonPress() {
+        present(LogInViewController(), animated: true)
     }
 }
 
