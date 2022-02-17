@@ -41,6 +41,10 @@
 		E597C32427BD4C710057146D /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = E597C32327BD4C710057146D /* users.json */; };
 		E597C32727BD561A0057146D /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C32627BD561A0057146D /* UserCell.swift */; };
 		E597C32927BD5E510057146D /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C32827BD5E510057146D /* UIViewController + Extension.swift */; };
+		E5CA631D27BE41020022B69E /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA631C27BE41020022B69E /* ProfileScreenViewController.swift */; };
+		E5CA631F27BE57560022B69E /* InsertableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA631E27BE57560022B69E /* InsertableTextField.swift */; };
+		E5CA632527BE7D440022B69E /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */; };
+		E5CA632727BEA3710022B69E /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA632627BEA3710022B69E /* UIView + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +84,10 @@
 		E597C32327BD4C710057146D /* users.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
 		E597C32627BD561A0057146D /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		E597C32827BD5E510057146D /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
+		E5CA631C27BE41020022B69E /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
+		E5CA631E27BE57560022B69E /* InsertableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertableTextField.swift; sourceTree = "<group>"; };
+		E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
+		E5CA632627BEA3710022B69E /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +127,9 @@
 				E597C30027B40EEA0057146D /* Controllers */,
 				E597C2F927B407660057146D /* SignIn&Auth */,
 				E597C2E627B2DB8E0057146D /* Extension */,
+				E597C32327BD4C710057146D /* users.json */,
+				E597C30627B64BAF0057146D /* activeChats.json */,
+				E597C30527B64BAF0057146D /* waitingChats.json */,
 				E597C2D027B165D80057146D /* Assets.xcassets */,
 				E597C2D227B165D80057146D /* LaunchScreen.storyboard */,
 				E597C2D527B165D80057146D /* Info.plist */,
@@ -138,9 +149,7 @@
 				E597C32827BD5E510057146D /* UIViewController + Extension.swift */,
 				E597C2DB27B256990057146D /* UIButton + Extension.swift */,
 				E597C2E127B263370057146D /* UILabel + Extension.swift */,
-				E597C32327BD4C710057146D /* users.json */,
-				E597C30627B64BAF0057146D /* activeChats.json */,
-				E597C30527B64BAF0057146D /* waitingChats.json */,
+				E5CA632627BEA3710022B69E /* UIView + Extension.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -152,6 +161,7 @@
 				E597C2F527B3CF530057146D /* ChoosePhotoView.swift */,
 				E597C2EF27B326070057146D /* OneLineTextField.swift */,
 				E597C31227BBDDDD0057146D /* GradientView.swift */,
+				E5CA631E27BE57560022B69E /* InsertableTextField.swift */,
 				E597C2E527B2DB840057146D /* UIKit */,
 			);
 			path = Extension;
@@ -173,6 +183,8 @@
 			children = (
 				E597C31D27BD4B050057146D /* Header */,
 				E597C2FA27B408820057146D /* MainTabBarController.swift */,
+				E5CA631C27BE41020022B69E /* ProfileScreenViewController.swift */,
+				E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */,
 				E597C31B27BD38200057146D /* ListViewController */,
 				E597C31C27BD38500057146D /* PeopleViewController */,
 			);
@@ -314,13 +326,16 @@
 			files = (
 				E597C32127BD4B580057146D /* MChat.swift in Sources */,
 				E597C2DE27B2603D0057146D /* UIFont + Extension.swift in Sources */,
+				E5CA632527BE7D440022B69E /* ChatRequestViewController.swift in Sources */,
 				E597C31327BBDDDD0057146D /* GradientView.swift in Sources */,
 				E597C31927BD348F0057146D /* SelfConfiguringCell.swift in Sources */,
 				E597C2CC27B165D70057146D /* AuthViewController.swift in Sources */,
 				E597C2F827B3E5F90057146D /* UISegmentedControl + Extension.swift in Sources */,
 				E597C2F627B3CF530057146D /* ChoosePhotoView.swift in Sources */,
 				E597C2C827B165D70057146D /* AppDelegate.swift in Sources */,
+				E5CA631D27BE41020022B69E /* ProfileScreenViewController.swift in Sources */,
 				E597C31F27BD4B520057146D /* MUser.swift in Sources */,
+				E5CA631F27BE57560022B69E /* InsertableTextField.swift in Sources */,
 				E597C30A27B64C0C0057146D /* Bundel + Extension.swift in Sources */,
 				E597C2FF27B40EAE0057146D /* PeopleViewController.swift in Sources */,
 				E597C2E227B263370057146D /* UILabel + Extension.swift in Sources */,
@@ -335,6 +350,7 @@
 				E597C32727BD561A0057146D /* UserCell.swift in Sources */,
 				E597C2FD27B4090D0057146D /* ListViewController.swift in Sources */,
 				E597C31027BBCBE40057146D /* WaitingChatsCell.swift in Sources */,
+				E5CA632727BEA3710022B69E /* UIView + Extension.swift in Sources */,
 				E597C30E27BBA5BF0057146D /* ActiveChatsCell.swift in Sources */,
 				E597C31727BD2D6E0057146D /* HeaderSection.swift in Sources */,
 				E597C2F227B3A6AC0057146D /* LoginViewController.swift in Sources */,
