@@ -24,6 +24,8 @@ class LogInViewController: UIViewController {
     private let emailTextField = OneLineTextField()
     private let passwordTextField = OneLineTextField()
     
+    weak var delegate: AuthNavigashenDelegate?
+    
     // MARK: - viewDidLaod
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,12 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         setupConstraints()
         addTargetButtons()
+    }
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        
+        print(#function)
     }
 }
 
@@ -85,7 +93,8 @@ extension LogInViewController {
     }
     
     private func addTargetButtons() {
-        logInButtom.addTarget(self, action: #selector(signInButtonPress), for: .touchUpInside)
+        logInButtom.addTarget(self, action: #selector(logInButtonPress), for: .touchUpInside)
+        signUpButtom.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
     }
 }
 
@@ -93,7 +102,7 @@ extension LogInViewController {
 // MARK: - @objc method
 extension LogInViewController {
     
-    @objc private func signInButtonPress() {
+    @objc private func logInButtonPress() {
         AuthService.shered.signIn(email: emailTextField.text!, password: passwordTextField.text!) { result in
             switch result {
             case .success(let user):
@@ -101,6 +110,12 @@ extension LogInViewController {
             case .failure(let error):
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }
+        }
+    }
+    
+    @objc private func signUpButtonPress() {
+        dismiss(animated: true) {
+            self.delegate?.goToSignUp()
         }
     }
 }

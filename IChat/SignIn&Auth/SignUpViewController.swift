@@ -10,18 +10,20 @@ import UIKit
 class SignUpViewController: UIViewController {
     
     // MARK: - Elements of interface
-    let mainLabel = UILabel(text: "Goot to see you!", font: .avenir26())
-    let emailLabel = UILabel(text: "Email")
-    let passwordLabel = UILabel(text: "Password")
-    let confirmPasswordLabel = UILabel(text: "ConfirmPassword")
-    let alreadyOnboardLabel = UILabel(text: "Already onboard?")
+    private let mainLabel = UILabel(text: "Goot to see you!", font: .avenir26())
+    private let emailLabel = UILabel(text: "Email")
+    private let passwordLabel = UILabel(text: "Password")
+    private let confirmPasswordLabel = UILabel(text: "ConfirmPassword")
+    private let alreadyOnboardLabel = UILabel(text: "Already onboard?")
     
-    let emailTextField = OneLineTextField()
-    let passwordTextField = OneLineTextField()
-    let confirmPasswordTextField = OneLineTextField()
+    private let emailTextField = OneLineTextField()
+    private let passwordTextField = OneLineTextField()
+    private let confirmPasswordTextField = OneLineTextField()
     
-    let signUpButton = UIButton(titel: "Sign Up", backgroundColor: .buttonDark(), titleColor: .white)
-    let loginButton = UIButton(titel: "Login", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
+    private let signUpButton = UIButton(titel: "Sign Up", backgroundColor: .buttonDark(), titleColor: .white)
+    private let logInButton = UIButton(titel: "Login", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
+    
+    weak var delegate: AuthNavigashenDelegate?
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -30,6 +32,12 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         setupConstraints()
         addTargetButtons()
+    }
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        
+        print(#function)
     }
     
 }
@@ -65,9 +73,9 @@ extension SignUpViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
-        let footerStackView = UIStackView(arrangedSubviews: [alreadyOnboardLabel, loginButton], axis: .horizontal, spacing: 10)
+        let footerStackView = UIStackView(arrangedSubviews: [alreadyOnboardLabel, logInButton], axis: .horizontal, spacing: 10)
         footerStackView.alignment = .firstBaseline
-        loginButton.contentHorizontalAlignment = .leading
+        logInButton.contentHorizontalAlignment = .leading
         view.addSubview(footerStackView)
         footerStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -79,6 +87,7 @@ extension SignUpViewController {
     
     private func addTargetButtons() {
         signUpButton.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
+        logInButton.addTarget(self, action: #selector(logInButtonPress), for: .touchUpInside)
     }
 }
 
@@ -87,15 +96,24 @@ extension SignUpViewController {
 extension SignUpViewController {
     
     @objc private func signUpButtonPress() {
-        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
-            switch result {
-            case .success(let user):
-                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
-            case .failure(let error):
-                self.showAlert(title: "Error", message: error.localizedDescription)
-            }
+        
+        
+//        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
+//            switch result {
+//            case .success(let user):
+//                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+//            case .failure(let error):
+//                self.showAlert(title: "Error", message: error.localizedDescription)
+//            }
+//        }
+    }
+    
+    @objc private func logInButtonPress() {
+        dismiss(animated: true) {
+            self.delegate?.goToLogIn()
         }
     }
+
 }
 
 

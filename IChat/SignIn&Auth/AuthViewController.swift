@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol AuthNavigashenDelegate: AnyObject {
+    func goToLogIn()
+    func goToSignUp()
+}
+
 class AuthViewController: UIViewController {
     
     // MARK: - Elements of interface
@@ -28,6 +33,9 @@ class AuthViewController: UIViewController {
                                        titleColor: .buttonRed(),
                                        isShadow: true)
     
+    private let loginVC = LogInViewController()
+    private let signUpVC = SignUpViewController()
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +44,9 @@ class AuthViewController: UIViewController {
         
         setupConstraints()
         addTargetButtons()
+        
+        loginVC.delegate = self
+        signUpVC.delegate = self
     }
     
     
@@ -80,11 +91,21 @@ extension AuthViewController {
 extension AuthViewController {
     
     @objc private func emailButtonPress() {
-        present(SignUpViewController(), animated: true)
+        present(signUpVC, animated: true)
     }
     
     @objc private func loginButtonPress() {
-        present(LogInViewController(), animated: true)
+        present(loginVC, animated: true)
+    }
+}
+
+extension AuthViewController: AuthNavigashenDelegate {
+    func goToLogIn() {
+        present(loginVC, animated: true)
+    }
+    
+    func goToSignUp() {
+        present(signUpVC, animated: true)
     }
 }
 
