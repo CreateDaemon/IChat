@@ -22,8 +22,7 @@ class SignUpViewController: UIViewController {
     
     private let signUpButton = UIButton(titel: "Sign Up", backgroundColor: .buttonDark(), titleColor: .white)
     private let logInButton = UIButton(titel: "Login", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
-    
-    weak var delegate: AuthNavigashenDelegate?
+    private let backButton = UIButton(titel: "Go to back", backgroundColor: .clear, titleColor: .buttonDark(), cornerRadius: 0)
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -32,12 +31,6 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         setupConstraints()
         addTargetButtons()
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        
-        print(#function)
     }
     
 }
@@ -83,11 +76,20 @@ extension SignUpViewController {
             footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
+        
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backButton)
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backButton.topAnchor.constraint(equalTo: footerStackView.bottomAnchor)
+        ])
     }
     
     private func addTargetButtons() {
         signUpButton.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
         logInButton.addTarget(self, action: #selector(logInButtonPress), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonPress), for: .touchUpInside)
     }
 }
 
@@ -97,21 +99,24 @@ extension SignUpViewController {
     
     @objc private func signUpButtonPress() {
         
+        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
         
-//        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
-//            switch result {
-//            case .success(let user):
-//                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
-//            case .failure(let error):
-//                self.showAlert(title: "Error", message: error.localizedDescription)
-//            }
-//        }
+        SceneDelegate.shared.rootViewController.goToSetupProfileViewController()
     }
     
     @objc private func logInButtonPress() {
-        dismiss(animated: true) {
-            self.delegate?.goToLogIn()
-        }
+        SceneDelegate.shared.rootViewController.goToLogInViewController()
+    }
+    
+    @objc private func backButtonPress() {
+        SceneDelegate.shared.rootViewController.goToAuthViewController()
     }
 
 }

@@ -6,11 +6,7 @@
 //
 
 import UIKit
-
-protocol AuthNavigashenDelegate: AnyObject {
-    func goToLogIn()
-    func goToSignUp()
-}
+import Firebase
 
 class AuthViewController: UIViewController {
     
@@ -44,12 +40,7 @@ class AuthViewController: UIViewController {
         
         setupConstraints()
         addTargetButtons()
-        
-        loginVC.delegate = self
-        signUpVC.delegate = self
     }
-    
-    
 }
 
 // MARK: - Private method
@@ -91,21 +82,11 @@ extension AuthViewController {
 extension AuthViewController {
     
     @objc private func emailButtonPress() {
-        present(signUpVC, animated: true)
+        SceneDelegate.shared.rootViewController.goToSignUpViewController()
     }
     
     @objc private func loginButtonPress() {
-        present(loginVC, animated: true)
-    }
-}
-
-extension AuthViewController: AuthNavigashenDelegate {
-    func goToLogIn() {
-        present(loginVC, animated: true)
-    }
-    
-    func goToSignUp() {
-        present(signUpVC, animated: true)
+        SceneDelegate.shared.rootViewController.goToLogInViewController()
     }
 }
 

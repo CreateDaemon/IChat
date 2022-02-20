@@ -12,6 +12,7 @@ class AuthService {
     static let shered = AuthService()
     private let auth = Auth.auth()
     
+    // MARK: - signUp
     func signUp(email: String?, password: String?, confirmPassword: String?, completion: @escaping (Result<User, Error>) -> Void) {
         
         guard
@@ -43,7 +44,8 @@ class AuthService {
             completion(.success(result.user))
         }
     }
-    
+     
+    // MARK: - sigIn
     func signIn(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> Void) {
         
         guard
@@ -72,4 +74,9 @@ class AuthService {
             completion(.success(result.user))
         }
     }
+    
+    // MARK: - Get data from Firestore
+//    func getDataFromFirestore(completion: @escaping (Result<MUser, Error>) -> Void) {
+//        FirebaseSourvice.shered.
+//    }
 }

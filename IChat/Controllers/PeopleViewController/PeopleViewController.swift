@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class PeopleViewController: UIViewController {
     
@@ -20,7 +21,8 @@ class PeopleViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, MUser>?
     
-    private let users = Bundle.main.decode([MUser].self, from: "users.json")!
+//    private let users = Bundle.main.decode([MUser].self, from: "users.json")!
+    private let users = [MUser(username: "Dima", email: "asdasd", description: "asdasda", avatarStringURL: "asd", sex: "asd", id: ":asdas")]
       
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
@@ -31,6 +33,8 @@ class PeopleViewController: UIViewController {
         
         setupCollectionViewDataSource()
         reloadData(with: nil)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(signOut))
     }
 }
 
@@ -158,6 +162,19 @@ struct PeopleVCProvider: PreviewProvider {
         
         func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
             
+        }
+    }
+}
+
+
+// MARK: - Private method
+extension PeopleViewController {
+    @objc private func signOut() {
+        do {
+            try Auth.auth().signOut()
+            SceneDelegate.shared.rootViewController.goToAuthViewController()
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
 }

@@ -50,6 +50,9 @@
 		E5CA631F27BE57560022B69E /* InsertableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA631E27BE57560022B69E /* InsertableTextField.swift */; };
 		E5CA632527BE7D440022B69E /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */; };
 		E5CA632727BEA3710022B69E /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA632627BEA3710022B69E /* UIView + Extension.swift */; };
+		E5F9651427C1277D0062BFBE /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9651327C1277D0062BFBE /* RootViewController.swift */; };
+		E5F9651627C24FD10062BFBE /* FirebaseSourvice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9651527C24FD10062BFBE /* FirebaseSourvice.swift */; };
+		E5F9651A27C265AB0062BFBE /* ProfileError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9651927C265AB0062BFBE /* ProfileError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +103,9 @@
 		E5CA631E27BE57560022B69E /* InsertableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertableTextField.swift; sourceTree = "<group>"; };
 		E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
 		E5CA632627BEA3710022B69E /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
+		E5F9651327C1277D0062BFBE /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		E5F9651527C24FD10062BFBE /* FirebaseSourvice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSourvice.swift; sourceTree = "<group>"; };
+		E5F9651927C265AB0062BFBE /* ProfileError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +142,7 @@
 			children = (
 				E597C32227BD4C0D0057146D /* Models */,
 				E5403D7727BEB63900657B65 /* AuthService.swift */,
+				E5F9651527C24FD10062BFBE /* FirebaseSourvice.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -145,6 +152,7 @@
 			children = (
 				E5403D7A27BED8A500657B65 /* Validators.swift */,
 				E5403D7C27BEDC3B00657B65 /* AuthError.swift */,
+				E5F9651927C265AB0062BFBE /* ProfileError.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -172,6 +180,7 @@
 			children = (
 				E597C2C727B165D70057146D /* AppDelegate.swift */,
 				E597C2C927B165D70057146D /* SceneDelegate.swift */,
+				E5F9651327C1277D0062BFBE /* RootViewController.swift */,
 				E597C31A27BD34BD0057146D /* Protocol */,
 				E597C30027B40EEA0057146D /* Controllers */,
 				E597C2F927B407660057146D /* SignIn&Auth */,
@@ -429,10 +438,12 @@
 				E597C2CC27B165D70057146D /* AuthViewController.swift in Sources */,
 				E5403D7D27BEDC3B00657B65 /* AuthError.swift in Sources */,
 				E597C2F827B3E5F90057146D /* UISegmentedControl + Extension.swift in Sources */,
+				E5F9651427C1277D0062BFBE /* RootViewController.swift in Sources */,
 				E597C2F627B3CF530057146D /* ChoosePhotoView.swift in Sources */,
 				E5403D7B27BED8A600657B65 /* Validators.swift in Sources */,
 				E597C2C827B165D70057146D /* AppDelegate.swift in Sources */,
 				E5CA631D27BE41020022B69E /* ProfileScreenViewController.swift in Sources */,
+				E5F9651A27C265AB0062BFBE /* ProfileError.swift in Sources */,
 				E597C31F27BD4B520057146D /* MUser.swift in Sources */,
 				E5CA631F27BE57560022B69E /* InsertableTextField.swift in Sources */,
 				E597C30A27B64C0C0057146D /* Bundel + Extension.swift in Sources */,
@@ -448,6 +459,7 @@
 				E597C2F027B326070057146D /* OneLineTextField.swift in Sources */,
 				E597C32727BD561A0057146D /* UserCell.swift in Sources */,
 				E597C2FD27B4090D0057146D /* ListViewController.swift in Sources */,
+				E5F9651627C24FD10062BFBE /* FirebaseSourvice.swift in Sources */,
 				E597C31027BBCBE40057146D /* WaitingChatsCell.swift in Sources */,
 				E5CA632727BEA3710022B69E /* UIView + Extension.swift in Sources */,
 				E597C30E27BBA5BF0057146D /* ActiveChatsCell.swift in Sources */,

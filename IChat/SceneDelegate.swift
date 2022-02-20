@@ -18,10 +18,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = AuthViewController()
+        window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
     }
 
 
+}
+
+extension SceneDelegate {
+    
+    static var shared: SceneDelegate {
+        guard let delegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else { fatalError() }
+        return delegate
+    }
+    
+    var rootViewController: RootViewController {
+          return window!.rootViewController as! RootViewController
+       }
 }
 

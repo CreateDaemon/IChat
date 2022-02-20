@@ -20,11 +20,10 @@ class LogInViewController: UIViewController {
     private let googleButtom = UIButton(titel: "Google", backgroundColor: .white, titleColor: .buttonDark(), isShadow: true)
     private let logInButtom = UIButton(titel: "Login", backgroundColor: .buttonDark(), titleColor: .mainWhite())
     private let signUpButtom = UIButton(titel: "Sign Up", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
+    private let backButton = UIButton(titel: "Go to back", backgroundColor: .clear, titleColor: .buttonDark(), cornerRadius: 0)
     
     private let emailTextField = OneLineTextField()
     private let passwordTextField = OneLineTextField()
-    
-    weak var delegate: AuthNavigashenDelegate?
     
     // MARK: - viewDidLaod
     override func viewDidLoad() {
@@ -34,12 +33,6 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         setupConstraints()
         addTargetButtons()
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        
-        print(#function)
     }
 }
 
@@ -90,11 +83,20 @@ extension LogInViewController {
             footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
+        
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backButton)
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backButton.topAnchor.constraint(equalTo: footerStackView.bottomAnchor)
+        ])
     }
     
     private func addTargetButtons() {
         logInButtom.addTarget(self, action: #selector(logInButtonPress), for: .touchUpInside)
         signUpButtom.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonPress), for: .touchUpInside)
     }
 }
 
@@ -111,11 +113,15 @@ extension LogInViewController {
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }
         }
+        
+        SceneDelegate.shared.rootViewController.goToMainTabBarController()
     }
     
     @objc private func signUpButtonPress() {
-        dismiss(animated: true) {
-            self.delegate?.goToSignUp()
-        }
+        SceneDelegate.shared.rootViewController.goToSignUpViewController()
+    }
+    
+    @objc private func backButtonPress() {
+        SceneDelegate.shared.rootViewController.goToAuthViewController()
     }
 }

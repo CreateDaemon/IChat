@@ -14,6 +14,8 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         
         setupTabBarControllers()
+        
+        
     }
 }
 

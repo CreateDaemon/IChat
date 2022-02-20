@@ -6,21 +6,22 @@
 //
 
 import UIKit
-
+import Firebase
 
 class SetupProfileViewController: UIViewController {
     
     // MARK: - Elements of interface
     private let maiLabel = UILabel(text: "Set up profile!", font: .avenir26())
-    private let fullNameLabel = UILabel(text: "Full name")
+    private let fullNameLabel = UILabel(text: "User name")
     private let aboutMeLabel = UILabel(text: "About me")
     private let sexLabel = UILabel(text: "Sex")
     
     private let goButton = UIButton(titel: "Go to chats!",
                                     backgroundColor: .buttonDark(),
                                     titleColor: .mainWhite())
+    private let cancelButton = UIButton(titel: "Cancel registration", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
     
-    private let fullNameTextField = OneLineTextField()
+    private let usernameTextField = OneLineTextField()
     private let aboutMeTextField = OneLineTextField()
     
     private let choosePhoto = ChoosePhotoView()
@@ -33,6 +34,7 @@ class SetupProfileViewController: UIViewController {
         
         view.backgroundColor = .white
         setupConstaints()
+        addTargetButtons()
     }
 }
 
@@ -54,7 +56,7 @@ extension SetupProfileViewController {
             choosePhoto.topAnchor.constraint(equalTo: maiLabel.bottomAnchor, constant: 30)
         ])
         
-        let nameStackView = UIStackView(arrangedSubviews: [fullNameLabel, fullNameTextField],
+        let nameStackView = UIStackView(arrangedSubviews: [fullNameLabel, usernameTextField],
                                         axis: .vertical,
                                         spacing: 0)
         let aboutMeStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextField],
@@ -75,6 +77,19 @@ extension SetupProfileViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
+        
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cancelButton)
+        NSLayoutConstraint.activate([
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cancelButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10)
+        ])
+    }
+    
+    private func addTargetButtons() {
+        cancelButton.addTarget(self, action: #selector(cancelButtonPress), for: .touchUpInside)
+        goButton.addTarget(self, action: #selector(goButtonPress), for: .touchUpInside)
     }
 }
 
@@ -101,4 +116,40 @@ struct SetupProfileVCProvider: PreviewProvider {
         }
     }
 }
+
+
+// MARK: - @objc method
+extension SetupProfileViewController {
+    
+    @objc private func goButtonPress() {
+        FirebaseSourvice.shered.saveNewUser(username: usernameTextField.text,
+                                            description: aboutMeTextField.text,
+                                            sex: segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex),
+                                            avatarStringURL: "qwe")
+        { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(title: "Completion", message: "Go to chat \(user.username)!")
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
+        
+        SceneDelegate.shared.rootViewController.goToMainTabBarController()
+    }
+    
+    @objc private func cancelButtonPress() {
+        
+        do {
+            try Auth.auth().signOut()
+            SceneDelegate.shared.rootViewController.goToAuthViewController()
+        } catch let error {
+            print("Sign Out Error: \(error.localizedDescription)")
+        }
+    }
+
+}
+
+
+
 
