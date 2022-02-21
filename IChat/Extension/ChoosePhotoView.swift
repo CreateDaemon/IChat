@@ -10,7 +10,7 @@ import UIKit
 
 class ChoosePhotoView: UIView {
     
-    private let photo: UIImageView = {
+    let photo: UIImageView = {
         let photo = UIImageView()
         photo.image = #imageLiteral(resourceName: "avatar")
         photo.contentMode = .center
@@ -20,7 +20,7 @@ class ChoosePhotoView: UIView {
         return photo
     }()
     
-    private let button: UIButton = {
+    let button: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         let image = #imageLiteral(resourceName: "plus")
@@ -45,6 +45,7 @@ class ChoosePhotoView: UIView {
         photo.layer.masksToBounds = true
         photo.layer.cornerRadius = photo.frame.width / 2
     }
+
 }
 
 

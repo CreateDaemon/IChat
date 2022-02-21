@@ -5,7 +5,8 @@
 //  Created by Дмитрий Межевич on 17.02.22.
 //
 
-import FirebaseAuth
+import Firebase
+import GoogleSignIn
 
 class AuthService {
     
@@ -75,8 +76,49 @@ class AuthService {
         }
     }
     
-    // MARK: - Get data from Firestore
-//    func getDataFromFirestore(completion: @escaping (Result<MUser, Error>) -> Void) {
-//        FirebaseSourvice.shered.
-//    }
+    func signInWithGoogle(viewController: UIViewController, completion: @escaping (Result<User, Error>) -> Void) {
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: viewController) { user, error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(.failure(AuthError.cancel))
+                return
+            }
+            
+            guard
+                let authentication = user?.authentication,
+                let idToken = authentication.idToken
+            else {
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+            
+            Auth.auth().signIn(with: credential) { user, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                completion(.success(user!.user))
+            }
+        }
+    }
+    
+    func SignOut(completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard auth.currentUser != nil else {
+            completion(.failure(ProfileError.userNorFound))
+            return
+        }
+        do {
+            try auth.signOut()
+        } catch let error {
+            completion(.failure(error))
+        }
+        completion(.success(true))
+    }
+    
 }
+
+

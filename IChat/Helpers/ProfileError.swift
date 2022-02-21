@@ -14,6 +14,7 @@ enum ProfileError {
     case dontHaveUID
     case notDocumentFile
     case errorTransformationInMUser
+    case userNorFound
 }
 
 extension ProfileError: LocalizedError {
@@ -31,6 +32,8 @@ extension ProfileError: LocalizedError {
             return NSLocalizedString("Отсуствует файл с личной информацией", comment: "")
         case .errorTransformationInMUser:
             return NSLocalizedString("Ошибка при преобразование данных в формат MUser", comment: "")
+        case .userNorFound:
+            return NSLocalizedString("Пользователь не найден", comment: "")
         }
     }
 }

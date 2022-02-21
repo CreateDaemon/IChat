@@ -50,8 +50,8 @@ extension RootViewController {
         sliderTransition(to: new, start: CGPoint(x: view.bounds.width, y: 0))
     }
     
-    func goToMainTabBarController() {
-        let new = MainTabBarController()
+    func goToMainTabBarController(user: MUser) {
+        let new = MainTabBarController(user: user)
         sliderTransition(to: new, start: CGPoint(x: view.bounds.width, y: 0))
     }
 }
@@ -78,8 +78,8 @@ extension RootViewController {
             switch result {
             case .failure:
                 self.setupRootViewController(with: SetupProfileViewController())
-            case .success:
-                self.setupRootViewController(with: MainTabBarController())
+            case .success(let user):
+                self.setupRootViewController(with: MainTabBarController(user: user))
             }
         }
     }

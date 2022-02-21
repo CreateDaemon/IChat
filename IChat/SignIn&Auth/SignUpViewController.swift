@@ -99,10 +99,18 @@ extension SignUpViewController {
     
     @objc private func signUpButtonPress() {
         
-        AuthService.shered.signUp(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { result in
+        AuthService.shered.signIn(email: emailTextField.text!, password: passwordTextField.text!) { result in
             switch result {
             case .success(let user):
-                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+                FirebaseSourvice.shered.getUserData(with: user.uid) { result in
+                    self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+                    switch result {
+                    case .success(let user):
+                        SceneDelegate.shared.rootViewController.goToMainTabBarController(user: user)
+                    case .failure:
+                        SceneDelegate.shared.rootViewController.goToSetupProfileViewController()
+                    }
+                }
             case .failure(let error):
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }

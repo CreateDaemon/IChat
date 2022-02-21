@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Validators {
     
@@ -22,7 +23,7 @@ class Validators {
         return true
     }
     
-    static func isFilled(username: String?, description: String?, sex: String?, avatarStringURL: String?) -> Bool {
+    static func isFilled(username: String?, description: String?, sex: String?) -> Bool {
         guard
             let username = username,
             let description = description,
@@ -30,8 +31,13 @@ class Validators {
             !username.isEmpty,
             !description.isEmpty,
             !sex.isEmpty
-        else { return false}
+        else { return false }
         
+        return true
+    }
+    
+    static func checkAvatar(avatarImage: UIImage) -> Bool {
+        guard avatarImage != #imageLiteral(resourceName: "avatar") else { return false }
         return true
     }
     

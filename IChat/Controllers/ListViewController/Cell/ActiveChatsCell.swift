@@ -85,29 +85,3 @@ extension ActiveChatsCell {
     }
 }
 
-
-
-// MARK: - PreviewProvider
-
-import SwiftUI
-
-struct MainTabBarControllerProvider: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ContainerView().edgesIgnoringSafeArea(.all)
-        }
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = MainTabBarController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}

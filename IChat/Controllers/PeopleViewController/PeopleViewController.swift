@@ -10,6 +10,8 @@ import Firebase
 
 class PeopleViewController: UIViewController {
     
+    private let activiteIndecator = UIActivityIndicatorView(hidenWhenStoped: true)
+    
     private enum Section: Int, CaseIterable {
         case users
         
@@ -35,6 +37,16 @@ class PeopleViewController: UIViewController {
         reloadData(with: nil)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(signOut))
+        
+        view.addSubview(activiteIndecator)
+        activiteIndecator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activiteIndecator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activiteIndecator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activiteIndecator.heightAnchor.constraint(equalToConstant: 90),
+            activiteIndecator.widthAnchor.constraint(equalToConstant: 90)
+        ])
+
     }
 }
 
@@ -143,38 +155,20 @@ extension PeopleViewController: UISearchBarDelegate {
     }
 }
 
-// MARK: - PreviewProvider
-
-import SwiftUI
-
-struct PeopleVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = MainTabBarController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}
-
 
 // MARK: - Private method
 extension PeopleViewController {
     @objc private func signOut() {
-        do {
-            try Auth.auth().signOut()
-            SceneDelegate.shared.rootViewController.goToAuthViewController()
-        } catch let error {
-            print(error.localizedDescription)
+        activiteIndecator.startAnimating()
+        AuthService.shered.SignOut { [unowned self] result in
+            switch result {
+            case .success:
+                self.activiteIndecator.stopAnimating()
+                SceneDelegate.shared.rootViewController.goToAuthViewController()
+            case .failure(let error):
+                self.activiteIndecator.stopAnimating()
+                showAlert(title: "Error", message: error.localizedDescription)
+            }
         }
     }
 }

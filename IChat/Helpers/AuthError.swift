@@ -13,6 +13,7 @@ enum AuthError {
     case passwordNotMatched
     case unknownedError
     case serverError
+    case cancel
 }
 
 extension AuthError: LocalizedError {
@@ -28,6 +29,8 @@ extension AuthError: LocalizedError {
             return NSLocalizedString("Не известная ошибка", comment: "")
         case .serverError:
             return NSLocalizedString("Ошибка сервера", comment: "")
+        case .cancel:
+            return NSLocalizedString("Отмена действия", comment: "")
         }
     }
 }

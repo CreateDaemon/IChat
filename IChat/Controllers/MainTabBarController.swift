@@ -9,12 +9,22 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
+    private let user: MUser
+    
+    init(user: MUser) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - viewDidLaod()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupTabBarControllers()
-        
         
     }
 }
@@ -26,6 +36,9 @@ extension MainTabBarController {
     private func setupTabBarControllers() {
         let listViewControlle = ListViewController()
         let peopleViewController = PeopleViewController()
+        
+        peopleViewController.title = user.username
+        listViewControlle.title = "Chats"
         
         tabBar.tintColor = #colorLiteral(red: 0.629904747, green: 0.4648939967, blue: 0.9760698676, alpha: 1)
         let boldConfigImage = UIImage.SymbolConfiguration(weight: .medium)

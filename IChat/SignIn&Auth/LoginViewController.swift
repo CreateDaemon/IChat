@@ -10,6 +10,8 @@ import UIKit
 class LogInViewController: UIViewController {
     
     // MARK: - Elements of interface
+    private let activiteIndecator = UIActivityIndicatorView(hidenWhenStoped: true)
+    
     private let mainLabel = UILabel(text: "Welcome back!", font: .avenir26())
     private let loginLabel = UILabel(text: "Login with")
     private let orLabel = UILabel(text: "or")
@@ -91,12 +93,22 @@ extension LogInViewController {
             backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backButton.topAnchor.constraint(equalTo: footerStackView.bottomAnchor)
         ])
+        
+        view.addSubview(activiteIndecator)
+        activiteIndecator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activiteIndecator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activiteIndecator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activiteIndecator.heightAnchor.constraint(equalToConstant: 90),
+            activiteIndecator.widthAnchor.constraint(equalToConstant: 90)
+        ])
     }
     
     private func addTargetButtons() {
         logInButtom.addTarget(self, action: #selector(logInButtonPress), for: .touchUpInside)
         signUpButtom.addTarget(self, action: #selector(signUpButtonPress), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(backButtonPress), for: .touchUpInside)
+        googleButtom.addTarget(self, action: #selector(googleButtonPress), for: .touchUpInside)
     }
 }
 
@@ -105,16 +117,27 @@ extension LogInViewController {
 extension LogInViewController {
     
     @objc private func logInButtonPress() {
+        activiteIndecator.startAnimating()
         AuthService.shered.signIn(email: emailTextField.text!, password: passwordTextField.text!) { result in
             switch result {
             case .success(let user):
-                self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+                FirebaseSourvice.shered.getUserData(with: user.uid) { [unowned self] result in
+                    self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
+                    switch result {
+                    case .success(let user):
+                        self.activiteIndecator.stopAnimating()
+                        SceneDelegate.shared.rootViewController.goToMainTabBarController(user: user)
+                    case .failure:
+                        self.activiteIndecator.stopAnimating()
+                        SceneDelegate.shared.rootViewController.goToSetupProfileViewController()
+                    }
+                }
             case .failure(let error):
+                self.activiteIndecator.stopAnimating()
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }
         }
         
-        SceneDelegate.shared.rootViewController.goToMainTabBarController()
     }
     
     @objc private func signUpButtonPress() {
@@ -123,5 +146,26 @@ extension LogInViewController {
     
     @objc private func backButtonPress() {
         SceneDelegate.shared.rootViewController.goToAuthViewController()
+    }
+    
+    @objc private func googleButtonPress() {
+        activiteIndecator.startAnimating()
+        AuthService.shered.signInWithGoogle(viewController: self) { [unowned self] result in
+            switch result {
+            case .success(let user):
+                FirebaseSourvice.shered.getUserData(with: user.uid) { result in
+                    switch result {
+                    case .success(let user):
+                        activiteIndecator.stopAnimating()
+                        SceneDelegate.shared.rootViewController.goToMainTabBarController(user: user)
+                    case .failure:
+                        activiteIndecator.stopAnimating()
+                        SceneDelegate.shared.rootViewController.goToSetupProfileViewController()
+                    }
+                }
+            case .failure:
+                activiteIndecator.stopAnimating()
+            }
+        }
     }
 }

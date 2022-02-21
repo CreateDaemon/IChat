@@ -16,31 +16,47 @@ class FirebaseSourvice {
         db.collection("users")
     }
     
-    func saveNewUser(username: String?, description: String?, sex: String?, avatarStringURL: String?, comletiom: @escaping (Result<MUser, Error>) -> Void) {
+    func saveNewUser(username: String?, description: String?, sex: String?, avatarImage: UIImage, comletiom: @escaping (Result<MUser, Error>) -> Void) {
         
         guard
-            Validators.isFilled(username: username, description: description, sex: sex, avatarStringURL: avatarStringURL)
+            Validators.isFilled(username: username, description: description, sex: sex)
         else {
             comletiom(.failure(ProfileError.notFilled))
             return
         }
         
-        let user = MUser(username: username!,
-                         email: Auth.auth().currentUser!.email!,
-                         description: description!,
-                         avatarStringURL: avatarStringURL!,
-                         sex: sex!,
-                         id: Auth.auth().currentUser!.uid)
-        
-        self.docRef.document(Auth.auth().currentUser!.uid).setData(user.representation) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
+        guard
+            Validators.checkAvatar(avatarImage: avatarImage)
+        else {
+            comletiom(.failure(ProfileError.photoNotExist))
+            return
         }
         
-        comletiom(.success(user))
+        
+        FirebaseStorage.shered.uploadAvatarImage(image: avatarImage) { result in
+            switch result {
+            case .success(let url):
+                let user = MUser(username: username!,
+                                 email: Auth.auth().currentUser!.email!,
+                                 description: description!,
+                                 avatarStringURL: url.absoluteString,
+                                 sex: sex!,
+                                 id: Auth.auth().currentUser!.uid)
+                
+                self.docRef.document(Auth.auth().currentUser!.uid).setData(user.representation) { err in
+                    if let err = err {
+                        print("Error writing document: \(err)")
+                        return
+                    } else {
+                        print("Document successfully written!")
+                    }
+                    comletiom(.success(user))
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                return
+            }
+        }
     }
     
     func getUserData(with uid: String?, completion: @escaping (Result<MUser, Error>) -> Void) {
