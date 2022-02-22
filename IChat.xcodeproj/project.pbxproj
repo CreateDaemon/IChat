@@ -47,6 +47,7 @@
 		E597C32427BD4C710057146D /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = E597C32327BD4C710057146D /* users.json */; };
 		E597C32727BD561A0057146D /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C32627BD561A0057146D /* UserCell.swift */; };
 		E597C32927BD5E510057146D /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E597C32827BD5E510057146D /* UIViewController + Extension.swift */; };
+		E5C7F43E27C4DF6D00F0A1DA /* ListenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7F43D27C4DF6D00F0A1DA /* ListenerService.swift */; };
 		E5CA631D27BE41020022B69E /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA631C27BE41020022B69E /* ProfileScreenViewController.swift */; };
 		E5CA631F27BE57560022B69E /* InsertableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA631E27BE57560022B69E /* InsertableTextField.swift */; };
 		E5CA632527BE7D440022B69E /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */; };
@@ -103,6 +104,7 @@
 		E597C32327BD4C710057146D /* users.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
 		E597C32627BD561A0057146D /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		E597C32827BD5E510057146D /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
+		E5C7F43D27C4DF6D00F0A1DA /* ListenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerService.swift; sourceTree = "<group>"; };
 		E5CA631C27BE41020022B69E /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
 		E5CA631E27BE57560022B69E /* InsertableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertableTextField.swift; sourceTree = "<group>"; };
 		E5CA632427BE7D440022B69E /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				E597C32227BD4C0D0057146D /* Models */,
 				E5403D7727BEB63900657B65 /* AuthService.swift */,
+				E5C7F43D27C4DF6D00F0A1DA /* ListenerService.swift */,
 				E5F0C00027C3EE6D00F04678 /* FirebaseStorage.swift */,
 				E5F9651527C24FD10062BFBE /* FirebaseSourvice.swift */,
 			);
@@ -460,6 +463,7 @@
 				E597C2FF27B40EAE0057146D /* PeopleViewController.swift in Sources */,
 				E597C2E227B263370057146D /* UILabel + Extension.swift in Sources */,
 				E597C2F427B3CE730057146D /* SetupProfileViewController.swift in Sources */,
+				E5C7F43E27C4DF6D00F0A1DA /* ListenerService.swift in Sources */,
 				E597C2EA27B2DC300057146D /* ButtonFromView.swift in Sources */,
 				E597C2E427B264560057146D /* UIImageView + Extension.swift in Sources */,
 				E597C2E027B2611B0057146D /* UIColor + Extension.swift in Sources */,

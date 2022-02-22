@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class UserCell: UICollectionViewCell, SelfConfiguringCell {
     
@@ -44,14 +45,20 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        userImage.image = nil
+    }
 }
 
 extension UserCell {
     
     func updateCell<U>(data: U) where U : Hashable {
         guard let data = data as? MUser else { fatalError() }
-        userImage.image = UIImage(named: data.avatarStringURL)
         userNameLabel.text = data.username
+        guard let urlImage = URL(string: data.avatarStringURL) else { return }
+        userImage.sd_setImage(with: urlImage, placeholderImage: #imageLiteral(resourceName: "avatar"))
     }
     
     private func setupSubview() {

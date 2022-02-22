@@ -5,7 +5,7 @@
 //  Created by Дмитрий Межевич on 16.02.22.
 //
 
-import Foundation
+import Firebase
 
 struct MUser: Hashable, Decodable {
     var username: String
@@ -36,6 +36,27 @@ struct MUser: Hashable, Decodable {
     
     init?(data: [String: Any]?) {
         guard let data = data else { return nil }
+        guard
+            let username = data["username"] as? String,
+            let email = data["email"] as? String,
+            let avatarStringURL = data["avatarStringURL"] as? String,
+            let description = data["description"] as? String,
+            let sex = data["sex"] as? String,
+            let id = data["id"] as? String
+        else {
+            return nil
+        }
+        
+        self.username = username
+        self.email = email
+        self.avatarStringURL = avatarStringURL
+        self.description = description
+        self.sex = sex
+        self.id = id
+    }
+    
+    init?(data: DocumentChange) {
+        let data = data.document.data()
         guard
             let username = data["username"] as? String,
             let email = data["email"] as? String,

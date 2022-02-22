@@ -10,6 +10,9 @@ import Firebase
 
 class PeopleViewController: UIViewController {
     
+    // MARK: - Property
+    private var listener: ListenerRegistration?
+    
     private let activiteIndecator = UIActivityIndicatorView(hidenWhenStoped: true)
     
     private enum Section: Int, CaseIterable {
@@ -23,35 +26,89 @@ class PeopleViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, MUser>?
     
-//    private let users = Bundle.main.decode([MUser].self, from: "users.json")!
-    private let users = [MUser(username: "Dima", email: "asdasd", description: "asdasda", avatarStringURL: "asd", sex: "asd", id: ":asdas")]
+    private var users = [MUser]()
       
+    
+    
+    
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupSearchController()
+        setupRightBarButtonItem()
         setupCollectionView()
         
         setupCollectionViewDataSource()
-        reloadData(with: nil)
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(signOut))
-        
-        view.addSubview(activiteIndecator)
-        activiteIndecator.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            activiteIndecator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activiteIndecator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            activiteIndecator.heightAnchor.constraint(equalToConstant: 90),
-            activiteIndecator.widthAnchor.constraint(equalToConstant: 90)
-        ])
+        setupActiviteIndecator()
+        registrationListener()
 
+    }
+    
+    deinit {
+        listener!.remove()
+    }
+}
+
+// MARK: - Private method
+extension PeopleViewController {
+    
+    
+    private func registrationListener() {
+        listener = ListenerService.shared.addListener(users: users, completion: { [unowned self] result in
+            switch result {
+            case .success(let users):
+                self.users = users
+                self.reloadData(with: nil)
+            case .failure(let error):
+                print(error)
+            }
+        })
+    }
+}
+
+// MARK: - Search Delegate
+extension PeopleViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        reloadData(with: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        reloadData(with: nil)
     }
 }
 
 
-// MARK: - Private method
+// MARK: - OBJC method
+extension PeopleViewController {
+    
+    @objc private func signOut() {
+        activiteIndecator.startAnimating()
+        AuthService.shered.SignOut { [unowned self] result in
+            switch result {
+            case .success:
+                self.activiteIndecator.stopAnimating()
+                SceneDelegate.shared.rootViewController.goToAuthViewController()
+            case .failure(let error):
+                self.activiteIndecator.stopAnimating()
+                showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - Private method setup all layer
 extension PeopleViewController {
     
     private func setupSearchController() {
@@ -141,34 +198,20 @@ extension PeopleViewController {
         
         return section
     }
-
-}
-
-// MARK: - Search Delegate
-extension PeopleViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        reloadData(with: searchText)
+    
+    private func setupRightBarButtonItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(signOut))
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        reloadData(with: nil)
+    private func setupActiviteIndecator() {
+        view.addSubview(activiteIndecator)
+        activiteIndecator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activiteIndecator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activiteIndecator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activiteIndecator.heightAnchor.constraint(equalToConstant: 90),
+            activiteIndecator.widthAnchor.constraint(equalToConstant: 90)
+        ])
     }
-}
 
-
-// MARK: - Private method
-extension PeopleViewController {
-    @objc private func signOut() {
-        activiteIndecator.startAnimating()
-        AuthService.shered.SignOut { [unowned self] result in
-            switch result {
-            case .success:
-                self.activiteIndecator.stopAnimating()
-                SceneDelegate.shared.rootViewController.goToAuthViewController()
-            case .failure(let error):
-                self.activiteIndecator.stopAnimating()
-                showAlert(title: "Error", message: error.localizedDescription)
-            }
-        }
-    }
 }

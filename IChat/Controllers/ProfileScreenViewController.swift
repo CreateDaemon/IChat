@@ -115,28 +115,3 @@ extension ProfileScreenViewController {
     }
 }
 
-
-// MARK: - PreviewProvider
-
-import SwiftUI
-
-struct ProfileScreenVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = ProfileScreenViewController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}
-
-

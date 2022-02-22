@@ -120,26 +120,3 @@ extension ChatRequestViewController {
     }
 }
 
-// MARK: - PreviewProvider
-
-import SwiftUI
-
-struct ChatRequestVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = ChatRequestViewController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}
-
