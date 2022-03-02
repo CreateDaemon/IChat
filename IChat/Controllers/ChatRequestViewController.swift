@@ -33,7 +33,7 @@ class ChatRequestViewController: UIViewController {
     }()
     
     private lazy var descriptionLabel: UILabel = {
-        let label = UILabel(text: "Hello! My name is Jon.", font: UIFont.systemFont(ofSize: 16, weight: .light))
+        let label = UILabel(text: "You have the opportunity to start a new chat", font: UIFont.systemFont(ofSize: 16, weight: .light))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         return label
@@ -42,6 +42,7 @@ class ChatRequestViewController: UIViewController {
     private lazy var acceptButton: UIButton = {
         let button = UIButton(titel: "Accept", backgroundColor: .black, titleColor: .white, font: .laoSangamMN20(), cornerRadius: 10)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(acceptButtonPress), for: .touchUpInside)
         return button
     }()
     
@@ -50,8 +51,25 @@ class ChatRequestViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.borderWidth = 1.2
         button.layer.borderColor = #colorLiteral(red: 0.8756850362, green: 0.2895075083, blue: 0.2576965988, alpha: 1)
+        button.addTarget(self, action: #selector(denyButtonPress), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var activiteIndecatorToAcceptButton = UIActivityIndicatorView(hidenWhenStoped: true)
+    private lazy var activiteIndecatorToDenyButton = UIActivityIndicatorView(hidenWhenStoped: true)
+    
+    private var currentChat: MChat
+    
+    weak var delegate: ChatRequestDelegate?
+    
+    init(currentChat: MChat) {
+        self.currentChat = currentChat
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +92,10 @@ extension ChatRequestViewController {
         view.addSubview(containerView)
         containerView.addSubview(nameLabel)
         containerView.addSubview(descriptionLabel)
+        acceptButton.addSubview(activiteIndecatorToAcceptButton)
+        denyButton.addSubview(activiteIndecatorToDenyButton)
+        activiteIndecatorToAcceptButton.translatesAutoresizingMaskIntoConstraints = false
+        activiteIndecatorToDenyButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Image view
         NSLayoutConstraint.activate([
@@ -117,6 +139,47 @@ extension ChatRequestViewController {
             stackView.heightAnchor.constraint(equalToConstant: 50)
         ])
         
+        // Description activite indecator to accept button
+        NSLayoutConstraint.activate([
+            activiteIndecatorToAcceptButton.centerXAnchor.constraint(equalTo: acceptButton.centerXAnchor),
+            activiteIndecatorToAcceptButton.centerYAnchor.constraint(equalTo: acceptButton.centerYAnchor)
+        ])
+        
+        // Description activite indecator to deny button
+        NSLayoutConstraint.activate([
+            activiteIndecatorToDenyButton.centerXAnchor.constraint(equalTo: denyButton.centerXAnchor),
+            activiteIndecatorToDenyButton.centerYAnchor.constraint(equalTo: denyButton.centerYAnchor)
+        ])
+        
+    }
+    
+    
+}
+
+
+extension ChatRequestViewController {
+    
+    func config() {
+        nameLabel.text = currentChat.username
+        imageView.sd_setImage(with: URL(string: currentChat.userImageString))
+    }
+}
+
+
+// MARK: - Objc method
+extension ChatRequestViewController {
+    @objc private func acceptButtonPress() {
+        acceptButton.isEnabled = false
+        denyButton.isEnabled = false
+        activiteIndecatorToAcceptButton.startAnimating()
+        delegate?.acceptWaitingChat(sender: currentChat)
+    }
+    
+    @objc private func denyButtonPress() {
+        acceptButton.isEnabled = false
+        denyButton.isEnabled = false
+        activiteIndecatorToDenyButton.startAnimating()
+        delegate?.denyWaitingChat(senderID: currentChat.id)
     }
 }
 

@@ -99,7 +99,7 @@ extension AuthViewController {
         AuthService.shered.signInWithGoogle(viewController: self) { [unowned self] result in
             switch result {
             case .success(let user):
-                FirebaseSourvice.shered.getUserData(with: user.uid) { result in
+                FirebaseService.shered.getUserData(with: user.uid) { result in
                     switch result {
                     case .success(let user):
                         activiteIndecator.stopAnimating()

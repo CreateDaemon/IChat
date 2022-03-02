@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class WaitingChatsCell: UICollectionViewCell, SelfConfiguringCell {
     
@@ -39,7 +40,7 @@ extension WaitingChatsCell {
     
     func updateCell<U>(data: U) where U : Hashable {
         guard let data = data as? MChat else { fatalError() }
-        userImage.image = UIImage(named: data.userImageString)
+        userImage.sd_setImage(with: URL(string: data.userImageString))
     }
     
     private func setupConstraints() {

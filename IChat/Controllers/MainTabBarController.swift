@@ -9,10 +9,10 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
-    private let user: MUser
+    private let currentUser: MUser
     
-    init(user: MUser) {
-        self.user = user
+    init(currentUser: MUser) {
+        self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -24,6 +24,7 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        delegate = self
         setupTabBarControllers()
         
     }
@@ -34,11 +35,12 @@ class MainTabBarController: UITabBarController {
 extension MainTabBarController {
     
     private func setupTabBarControllers() {
-        let listViewControlle = ListViewController()
-        let peopleViewController = PeopleViewController()
         
-        peopleViewController.title = user.username
-        listViewControlle.title = "Chats"
+        let listViewControlle = ListViewController()
+        let peopleViewController = PeopleViewController(currentUser: currentUser)
+        
+        peopleViewController.title = currentUser.username
+        listViewControlle.title = currentUser.username
         
         tabBar.tintColor = #colorLiteral(red: 0.629904747, green: 0.4648939967, blue: 0.9760698676, alpha: 1)
         let boldConfigImage = UIImage.SymbolConfiguration(weight: .medium)
@@ -73,4 +75,21 @@ extension MainTabBarController {
         navBar.tabBarItem.image = image
         return navBar
     }
+}
+
+
+extension MainTabBarController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+
+            guard let fromView = selectedViewController?.view, let toView = viewController.view else {
+              return false
+            }
+
+            if fromView != toView {
+              UIView.transition(from: fromView, to: toView, duration: 0.5, options: [.transitionCrossDissolve], completion: nil)
+            }
+
+            return true
+        }
 }

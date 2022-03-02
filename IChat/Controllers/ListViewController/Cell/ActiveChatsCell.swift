@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ActiveChatsCell: UICollectionViewCell, SelfConfiguringCell {
     
@@ -41,7 +42,7 @@ extension ActiveChatsCell {
     
     func updateCell<U>(data: U) where U : Hashable {
         guard let data = data as? MChat else { fatalError() }
-        userImage.image = UIImage(named: data.userImageString)
+        userImage.sd_setImage(with: URL(string: data.userImageString))
         userName.text = data.username
         lastMessage.text = data.lastMessage
     }

@@ -51,7 +51,7 @@ extension RootViewController {
     }
     
     func goToMainTabBarController(user: MUser) {
-        let new = MainTabBarController(user: user)
+        let new = MainTabBarController(currentUser: user)
         sliderTransition(to: new, start: CGPoint(x: view.bounds.width, y: 0))
     }
 }
@@ -74,12 +74,12 @@ extension RootViewController {
             return
         }
         
-        FirebaseSourvice.shered.getUserData(with: currentUser.uid) { [unowned self] result in
+        FirebaseService.shered.getUserData(with: currentUser.uid) { [unowned self] result in
             switch result {
             case .failure:
                 self.setupRootViewController(with: SetupProfileViewController())
             case .success(let user):
-                self.setupRootViewController(with: MainTabBarController(user: user))
+                self.setupRootViewController(with: MainTabBarController(currentUser: user))
             }
         }
     }

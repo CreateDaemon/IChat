@@ -111,7 +111,7 @@ extension SetupProfileViewController {
     
     @objc private func goButtonPress() {
         activiteIndecator.startAnimating()
-        FirebaseSourvice.shered.saveNewUser(username: usernameTextField.text,
+        FirebaseService.shered.saveNewUser(username: usernameTextField.text,
                                             description: aboutMeTextField.text,
                                             sex: segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex),
                                             avatarImage: choosePhoto.photo.image!)

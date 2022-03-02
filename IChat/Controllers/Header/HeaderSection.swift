@@ -9,7 +9,11 @@ import UIKit
 
 class HeaderSection: UICollectionReusableView {
     
-    static let reuseId = "HeaderSection"
+//    static let reuseId = "HeaderSection"
+    
+    static var reuseIdentifier: String {
+        "HeaderSection"
+    }
     
     private let label = UILabel()
     
@@ -38,5 +42,16 @@ extension HeaderSection {
         label.text = textHeader
         label.font = font
         label.textColor = textColor
+    }
+    
+    func configure(textHeader: String) {
+        label.text = textHeader
+    }
+}
+
+extension HeaderSection {
+    
+    static func ==(lhs: HeaderSection, rhs: HeaderSection) -> Bool {
+        lhs.label.text == rhs.label.text
     }
 }

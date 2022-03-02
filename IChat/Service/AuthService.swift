@@ -113,6 +113,7 @@ class AuthService {
         }
         do {
             try auth.signOut()
+            UserDefaultsService.shared.deleteChats()
         } catch let error {
             completion(.failure(error))
         }

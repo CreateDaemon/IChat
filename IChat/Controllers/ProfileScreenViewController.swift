@@ -6,19 +6,21 @@
 //
 
 import UIKit
-
+import SDWebImage
 
 class ProfileScreenViewController: UIViewController {
     
-    private lazy var imageView: UIImageView = {
+    private let sender: MUser
+    private let receiver: MUser
+    
+    private var imageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = #imageLiteral(resourceName: "human2")
         view.contentMode = .scaleAspectFill
         return view
     }()
     
-    private lazy var containerView: UIView = {
+    private var containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 30
@@ -27,24 +29,40 @@ class ProfileScreenViewController: UIViewController {
         return view
     }()
     
-    private lazy var nameLabel: UILabel = {
+    private var nameLabel: UILabel = {
         let label = UILabel(text: "Jon Finder", font: UIFont.systemFont(ofSize: 20, weight: .light))
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private var descriptionLabel: UILabel = {
         let label = UILabel(text: "Hello! My name is Jon.", font: UIFont.systemFont(ofSize: 16, weight: .light))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         return label
     }()
     
-    private lazy var textField: InsertableTextField = {
+    private var textField: InsertableTextField = {
         let textField = InsertableTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
+    
+    init(sender: MUser, receiver: MUser) {
+        self.sender = sender
+        self.receiver = receiver
+        
+        textField.text = ""
+        nameLabel.text = receiver.username
+        descriptionLabel.text = receiver.description
+        imageView.sd_setImage(with: URL(string: receiver.avatarStringURL))
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +129,27 @@ extension ProfileScreenViewController {
     }
     
     @objc private func touchUpSentButton() {
-        print("Sent masseg!")
+        guard
+            let message = textField.text,
+            !message.isEmpty
+        else {
+            return
+        }
+        
+        guard let button = textField.rightView as? UIButton else { return }
+        button.isEnabled = false
+        
+        guard let mmessage = MMessage(data: sender, lastMessage: message) else { return }
+        
+        FirebaseService.shered.sendingMessage(from: sender, to: receiver, message: mmessage) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.dismiss(animated: true)
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
     }
 }
 

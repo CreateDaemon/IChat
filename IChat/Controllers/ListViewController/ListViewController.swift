@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 
 class ListViewController: UIViewController {
@@ -26,8 +27,17 @@ class ListViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, MChat>?
     
-    private let activeChatsData = Bundle.main.decode([MChat].self, from: "activeChats.json")!
-    private let waitingChatsData = Bundle.main.decode([MChat].self, from: "waitingChats.json")!
+    private var activeChats = [MChat]()
+    private var waitingChats = [MChat]()
+    
+    private var waitingChatsListener: ListenerRegistration?
+    private var activeChatsListener: ListenerRegistration?
+    
+    
+    deinit {
+        waitingChatsListener?.remove()
+        activeChatsListener?.remove()
+    }
     
     // MARK: - viewDidLaod()
     override func viewDidLoad() {
@@ -37,9 +47,119 @@ class ListViewController: UIViewController {
         setupSearchController()
         
         setupCollectionDataSource()
-        reloadData()
+//        reloadData()
+        
+        activeChatsListener = ListenerService.shared.addListenerActiveChats(activeChats: activeChats, completion: { [unowned self] result in
+            switch result {
+            case .success(let chats):
+                self.activeChats = chats
+                reloadData()
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        })
+        
+        waitingChatsListener = ListenerService.shared.addListenerWaitingChats(waitingChats: waitingChats, completion: { [unowned self] result in
+            switch result {
+            case .success(let chats):
+                if chats.count > self.waitingChats.count {
+                    guard let user = chats.last else { return }
+                    let chatRequestVC = ChatRequestViewController(currentChat: user)
+                    chatRequestVC.config()
+                    chatRequestVC.delegate = self
+                    present(chatRequestVC, animated: true)
+                }
+                self.waitingChats = chats
+                reloadData()
+//                self.waitingChatsListener?.remove()
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        })
+        
+        
     }
 }
+
+
+// MARK: - UISearchBarDelegate
+extension ListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+    }
+}
+
+
+// MARK: - UICollectionViewDelegate
+extension ListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard
+            let section = Section(rawValue: indexPath.section),
+            let chat = collectionViewDataSource?.itemIdentifier(for: indexPath)
+        else {
+            return }
+        
+        switch section {
+        case .waitingChats:
+            let chatRequestVC = ChatRequestViewController(currentChat: chat)
+            chatRequestVC.config()
+            chatRequestVC.delegate = self
+            present(chatRequestVC, animated: true)
+        case .activeChats:
+            // TODO: - push to ChatViewController
+            showAlert(title: "Active Chats", message: "Chats")
+        }
+    }
+}
+
+
+// MARK: - UICollectionViewDelegate
+extension ListViewController: ChatRequestDelegate {
+    
+    func acceptWaitingChat(sender: MChat) {
+        FirebaseService.shered.createActiveChat(sender: sender) { [unowned self] result in
+            switch result {
+            case .success:
+                self.dismiss(animated: true)
+            case .failure(let error):
+                self.dismiss(animated: true)
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
+    }
+    
+    func denyWaitingChat(senderID: String) {
+        FirebaseService.shered.deleteAllMessageInChat(senderID: senderID) { [unowned self] result in
+            switch result {
+            case .success:
+                self.dismiss(animated: true)
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // MARK: - Private method
 extension ListViewController {
@@ -61,14 +181,16 @@ extension ListViewController {
         
         collectionView.register(ActiveChatsCell.self, forCellWithReuseIdentifier: ActiveChatsCell.reuseId)
         collectionView.register(WaitingChatsCell.self, forCellWithReuseIdentifier: WaitingChatsCell.reuseId)
-        collectionView.register(HeaderSection.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSection.reuseId)
+        collectionView.register(HeaderSection.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSection.reuseIdentifier)
+        
+        collectionView.delegate = self
     }
     
     private func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, MChat>()
         snapshot.appendSections([.waitingChats, .activeChats])
-        snapshot.appendItems(waitingChatsData, toSection: .waitingChats)
-        snapshot.appendItems(activeChatsData, toSection: .activeChats)
+        snapshot.appendItems(activeChats, toSection: .activeChats)
+        snapshot.appendItems(waitingChats, toSection: .waitingChats)
         collectionViewDataSource?.apply(snapshot, animatingDifferences: true)
     }
     
@@ -87,7 +209,7 @@ extension ListViewController {
         })
         
         collectionViewDataSource?.supplementaryViewProvider = { collectionView, kind, indexPath in
-            guard let headerSection = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSection.reuseId, for: indexPath) as? HeaderSection else { fatalError() }
+            guard let headerSection = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSection.reuseIdentifier, for: indexPath) as? HeaderSection else { fatalError() }
             guard let section = Section(rawValue: indexPath.section) else { fatalError() }
             headerSection.configure(textHeader: section.description(), font: .laoSangamMN20(), textColor: .lightGray)
             return headerSection
@@ -158,14 +280,6 @@ extension ListViewController {
         let hedearSectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                        heightDimension: .estimated(1))
         return NSCollectionLayoutBoundarySupplementaryItem(layoutSize: hedearSectionSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-    }
-}
-
-
-// MARK: - Search Delegate
-extension ListViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
     }
 }
 

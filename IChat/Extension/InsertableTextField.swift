@@ -72,27 +72,3 @@ extension InsertableTextField {
         return bounds.insetBy(dx: 36, dy: 0)
     }
 }
-
-
-// MARK: - PreviewProvider
-
-import SwiftUI
-
-struct InsertableTextFieldProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = ProfileScreenViewController()
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}
