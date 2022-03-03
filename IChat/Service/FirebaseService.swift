@@ -164,20 +164,40 @@ class FirebaseService {
     }
     
     // MARK: - Checks if there is already an active chat with the receiver
-    func chekcSenderHaveActiveChat(receiver: MUser, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func chekcSenderHaveActiveChat(receiver: MUser, completion: @escaping (Result<MChat?, Error>) -> Void) {
         let documentRef = db.collection(["users", receiver.id, "activeChats"].joined(separator: "/"))
         
-        documentRef.document(currentUID).getDocument { document, error in
+        documentRef.document(currentUID).getDocument { [unowned self] document, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
             
             guard let document = document, document.exists else {
-                completion(.success(false))
+                completion(.success(nil))
                 return
             }
-            completion(.success(true))
+            
+            let receiverChatRef = self.db.collection(["users", self.currentUID, "activeChats"].joined(separator: "/"))
+            receiverChatRef.document(receiver.id).getDocument { document, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let document = document, document.exists else {
+                    completion(.success(nil))
+                    return
+                }
+                
+                guard
+                    let data = document.data(),
+                    let chat = MChat(data: data)
+                else {
+                    return
+                }
+                completion(.success(chat))
+            }
         }
     }
     
@@ -223,6 +243,31 @@ extension FirebaseService {
             }
         }
     }
+    
+    func sendMessageInChat(sender: MUser, chat: MChat, message: MMessage,completion: @escaping (Result<Void, Error>) -> Void) {
+        let ref = db.collection("users")
+        
+        ref.document(chat.id).getDocument { [unowned self] document, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                return
+            }
+            
+            guard let receiver = MUser(data: document.data()) else { return }
+            sendingMessage(from: sender, to: receiver, message: message) { result in
+                switch result {
+                case .success():
+                    completion(.success(Void()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }
 
 
@@ -261,7 +306,7 @@ extension FirebaseService {
     // Add document with sender and add message in this document
     private func addSenderAndMessage(user: MUser, message: MMessage, reference: CollectionReference, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        guard let chat = MChat(data: user, lastMessage: message.content) else { return }
+        guard let chat = MChat(data: user, lastMessage: message.text ?? "") else { return }
         
         reference.document(user.id).setData(chat.representation) { error in
             if let error = error {
@@ -270,7 +315,7 @@ extension FirebaseService {
             }
             
             let messageCollectionRef = reference.document(user.id).collection("messages")
-            messageCollectionRef.addDocument(data: message.representation) { erorr in
+            messageCollectionRef.document(message.messageId).setData(message.representation) { erorr in
                 if let error = error {
                     completion(.failure(error))
                     return
@@ -293,7 +338,7 @@ extension FirebaseService {
             }
             
             documents.forEach { document in
-                guard let message = MMessage(data: document.data()) else { return }
+                guard let message = MMessage(document: document) else { return }
                 massages.append(message)
                 document.reference.delete()
             }

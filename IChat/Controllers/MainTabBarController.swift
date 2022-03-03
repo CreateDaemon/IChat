@@ -36,7 +36,7 @@ extension MainTabBarController {
     
     private func setupTabBarControllers() {
         
-        let listViewControlle = ListViewController()
+        let listViewControlle = ListViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
         
         peopleViewController.title = currentUser.username

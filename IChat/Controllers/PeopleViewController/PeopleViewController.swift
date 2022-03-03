@@ -116,14 +116,15 @@ extension PeopleViewController: UICollectionViewDelegate {
         FirebaseService.shered.chekcSenderHaveActiveChat(receiver: receiver) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let res):
-                if res {
-                    // TODO: - push to ChatViewController
-                    print("Yes")
-                } else {
+            case .success(let chat):
+                guard let chat = chat else {
                     let profileVC = ProfileScreenViewController(sender: self.currentUser, receiver: receiver)
                     self.present(profileVC, animated: true)
+                    return
                 }
+                
+                let chatVC = ChatViewController(currentUser: self.currentUser, chat: chat)
+                self.navigationController?.pushViewController(chatVC, animated: true)
             case .failure(let error):
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }

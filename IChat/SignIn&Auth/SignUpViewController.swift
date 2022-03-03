@@ -33,6 +33,11 @@ class SignUpViewController: UIViewController {
         addTargetButtons()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
 }
 
 // MARK: - Private method
@@ -51,11 +56,11 @@ extension SignUpViewController {
                                          axis: .vertical,
                                          spacing: 0)
         let passwordSteckView = UIStackView(arrangedSubviews: [passwordLabel, passwordTextField],
-                                         axis: .vertical,
-                                         spacing: 0)
+                                            axis: .vertical,
+                                            spacing: 0)
         let confirmPasswordSteckView = UIStackView(arrangedSubviews: [confirmPasswordLabel, confirmPasswordTextField],
-                                         axis: .vertical,
-                                         spacing: 0)
+                                                   axis: .vertical,
+                                                   spacing: 0)
         let stackView = UIStackView(arrangedSubviews: [emailSteckView, passwordSteckView, confirmPasswordSteckView, signUpButton], axis: .vertical, spacing: 40)
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +129,7 @@ extension SignUpViewController {
     @objc private func backButtonPress() {
         SceneDelegate.shared.rootViewController.goToAuthViewController()
     }
-
+    
 }
 
 

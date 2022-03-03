@@ -7,64 +7,109 @@
 
 import Foundation
 import Firebase
+import MessageKit
 
-struct MMessage: Hashable, Decodable {
-    var content: String
+struct Sender: SenderType {
     var senderId: String
-    var senderUsername: String
-    var senderDate: Date
+    var displayName: String
+}
+
+struct Photo: MediaItem {
+    var url: URL?
+    var image: UIImage?
+    var placeholderImage: UIImage
+    var size: CGSize
+}
+
+struct MMessage: MessageType {
+    var sender: SenderType
+    var messageId: String
+    var sentDate: Date
+    
+    var text: String? = nil
+    var image: UIImage? = nil
+    var downloadURL: URL? = nil
+    
+    var kind: MessageKind {
+        if let text = text, !text.isEmpty {
+            return .text(text)
+        } else if let image = image {
+            let photo = Photo(url: nil,
+                              image: nil,
+                              placeholderImage: image,
+                              size: image.size)
+            return .photo(photo)
+        } else {
+            return .text("")
+        }
+    }
+    
     
     var representation: [String: Any] {
-        var rep: [String: Any] = ["content": content]
-        rep["senderId"] = senderId
-        rep["senderUsername"] = senderUsername
-        rep["senderDate"] = senderDate
+        var rep: [String: Any] = ["senderId": sender.senderId]
+        rep["displayName"] = sender.displayName
+        rep["messageId"] = messageId
+        rep["sentDate"] = sentDate
+        
+        if let text = text {
+            rep["text"] = text
+        } else if let downloadURL = downloadURL {
+            rep["downloadURL"] = downloadURL.absoluteString
+        }
         
         return rep
     }
     
-    init?(data: MUser, lastMessage: String) {
-        content = lastMessage
-        senderId = data.id
-        senderUsername = data.username
-        senderDate = Date()
+    init(user: MUser, text: String) {
+        sender = Sender(senderId: user.id, displayName: user.username)
+        messageId = UUID().uuidString
+        sentDate = Date()
+        self.text = text
     }
     
-    init?(data: [String: Any]) {
-        guard
-            let content = data["content"] as? String,
-            let senderId = data["senderId"] as? String,
-            let senderUsername = data["senderUsername"] as? String,
-            let senderDate = data["senderDate"] as? Timestamp
-        else { return nil }
-        
-        self.content = content
-        self.senderId = senderId
-        self.senderUsername = senderUsername
-        self.senderDate = senderDate.dateValue()
+    init(user: MUser, downloadURL: URL) {
+        sender = Sender(senderId: user.id, displayName: user.username)
+        messageId = UUID().uuidString
+        sentDate = Date()
+        self.downloadURL = downloadURL
     }
     
-    init?(data: DocumentChange) {
-        let data = data.document.data()
+    init?(document: QueryDocumentSnapshot) {
+        let document = document.data()
         
         guard
-            let content = data["content"] as? String,
-            let senderId = data["senderId"] as? String,
-            let senderUsername = data["senderUsername"] as? String,
-            let senderDate = data["senderDate"] as? Date
+            let senderId = document["senderId"] as? String,
+            let displayName = document["displayName"] as? String,
+            let messageId = document["messageId"] as? String,
+            let sentDate = document["sentDate"] as? Timestamp
         else { return nil }
         
-        self.content = content
-        self.senderId = senderId
-        self.senderUsername = senderUsername
-        self.senderDate = senderDate
+        if let text = document["text"] as? String {
+            self.text = text
+        } else if let downloadURLString = document["downloadURL"] as? String,
+                  let downloadURL = URL(string: downloadURLString) {
+            self.downloadURL = downloadURL
+        }
+        
+        sender = Sender(senderId: senderId, displayName: displayName)
+        self.messageId = messageId
+        self.sentDate = sentDate.dateValue()
     }
+}
+
+extension MMessage: Hashable {
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(senderId)
+        hasher.combine(messageId)
     }
     
     static func == (lhs: MMessage, rhs: MMessage) -> Bool {
-        return lhs.senderId == rhs.senderId
+        return lhs.messageId == rhs.messageId
+    }
+}
+
+extension MMessage: Comparable {
+    static func < (lhs: MMessage, rhs: MMessage) -> Bool {
+        lhs.sentDate < rhs.sentDate
     }
 }

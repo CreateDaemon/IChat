@@ -139,7 +139,7 @@ extension ProfileScreenViewController {
         guard let button = textField.rightView as? UIButton else { return }
         button.isEnabled = false
         
-        guard let mmessage = MMessage(data: sender, lastMessage: message) else { return }
+        let mmessage = MMessage(user: sender, text: message)
         
         FirebaseService.shered.sendingMessage(from: sender, to: receiver, message: mmessage) { [weak self] result in
             guard let self = self else { return }

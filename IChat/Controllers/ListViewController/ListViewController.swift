@@ -27,12 +27,22 @@ class ListViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, MChat>?
     
+    private let currentUser: MUser
+    
     private var activeChats = [MChat]()
     private var waitingChats = [MChat]()
     
     private var waitingChatsListener: ListenerRegistration?
     private var activeChatsListener: ListenerRegistration?
     
+    init(currentUser: MUser) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     deinit {
         waitingChatsListener?.remove()
@@ -47,7 +57,6 @@ class ListViewController: UIViewController {
         setupSearchController()
         
         setupCollectionDataSource()
-//        reloadData()
         
         activeChatsListener = ListenerService.shared.addListenerActiveChats(activeChats: activeChats, completion: { [unowned self] result in
             switch result {
@@ -71,7 +80,6 @@ class ListViewController: UIViewController {
                 }
                 self.waitingChats = chats
                 reloadData()
-//                self.waitingChatsListener?.remove()
             case .failure(let error):
                 self.showAlert(title: "Error", message: error.localizedDescription)
             }
@@ -106,8 +114,8 @@ extension ListViewController: UICollectionViewDelegate {
             chatRequestVC.delegate = self
             present(chatRequestVC, animated: true)
         case .activeChats:
-            // TODO: - push to ChatViewController
-            showAlert(title: "Active Chats", message: "Chats")
+            let chatVC = ChatViewController(currentUser: currentUser, chat: chat)
+            navigationController?.pushViewController(chatVC, animated: true)
         }
     }
 }
@@ -117,10 +125,14 @@ extension ListViewController: UICollectionViewDelegate {
 extension ListViewController: ChatRequestDelegate {
     
     func acceptWaitingChat(sender: MChat) {
-        FirebaseService.shered.createActiveChat(sender: sender) { [unowned self] result in
+        FirebaseService.shered.createActiveChat(sender: sender) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success:
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    let chatVC = ChatViewController(currentUser: self.currentUser, chat: sender)
+                    self.navigationController?.pushViewController(chatVC, animated: true)
+                }
             case .failure(let error):
                 self.dismiss(animated: true)
                 self.showAlert(title: "Error", message: error.localizedDescription)
