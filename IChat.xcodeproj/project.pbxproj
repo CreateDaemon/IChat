@@ -13,6 +13,7 @@
 		E5403D7B27BED8A600657B65 /* Validators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5403D7A27BED8A500657B65 /* Validators.swift */; };
 		E5403D7D27BEDC3B00657B65 /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5403D7C27BEDC3B00657B65 /* AuthError.swift */; };
 		E567EC3B27C3C9C700749DEA /* UIActivityIndicatorView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E567EC3A27C3C9C700749DEA /* UIActivityIndicatorView + Extension.swift */; };
+		E58776D327F44882002F3C25 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58776D227F44882002F3C25 /* KeyboardObserver.swift */; };
 		E58B386927CFD893009F0223 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58B386827CFD893009F0223 /* ChatViewController.swift */; };
 		E58CC2B327C625B000630D2E /* MMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58CC2B227C625B000630D2E /* MMessage.swift */; };
 		E58CC2B527C764E200630D2E /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58CC2B427C764E200630D2E /* UserDefaultsService.swift */; };
@@ -69,6 +70,7 @@
 		E5403D7A27BED8A500657B65 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
 		E5403D7C27BEDC3B00657B65 /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
 		E567EC3A27C3C9C700749DEA /* UIActivityIndicatorView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView + Extension.swift"; sourceTree = "<group>"; };
+		E58776D227F44882002F3C25 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		E58B386827CFD893009F0223 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		E58CC2B227C625B000630D2E /* MMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMessage.swift; sourceTree = "<group>"; };
 		E58CC2B427C764E200630D2E /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				E5403D7A27BED8A500657B65 /* Validators.swift */,
 				E5403D7C27BEDC3B00657B65 /* AuthError.swift */,
 				E5F9651927C265AB0062BFBE /* ProfileError.swift */,
+				E58776D227F44882002F3C25 /* KeyboardObserver.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 				AD14C80054DC6FA5C485271B /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		E597C2C527B165D70057146D /* Products */ = {
 			isa = PBXGroup;
@@ -462,6 +466,7 @@
 				E597C30A27B64C0C0057146D /* Bundel + Extension.swift in Sources */,
 				E5F0C00127C3EE6D00F04678 /* FirebaseStorage.swift in Sources */,
 				E597C2FF27B40EAE0057146D /* PeopleViewController.swift in Sources */,
+				E58776D327F44882002F3C25 /* KeyboardObserver.swift in Sources */,
 				E597C2E227B263370057146D /* UILabel + Extension.swift in Sources */,
 				E597C2F427B3CE730057146D /* SetupProfileViewController.swift in Sources */,
 				E5C7F43E27C4DF6D00F0A1DA /* ListenerService.swift in Sources */,

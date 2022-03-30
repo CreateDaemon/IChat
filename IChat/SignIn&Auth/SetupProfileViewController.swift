@@ -21,7 +21,7 @@ class SetupProfileViewController: UIViewController {
     private let goButton = UIButton(titel: "Go to chats!",
                                     backgroundColor: .buttonDark(),
                                     titleColor: .mainWhite())
-    private let cancelButton = UIButton(titel: "Cancel registration", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
+    let cancelButton = UIButton(titel: "Cancel registration", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
     
     private let usernameTextField = OneLineTextField()
     private let aboutMeTextField = OneLineTextField()
@@ -30,18 +30,32 @@ class SetupProfileViewController: UIViewController {
     
     private let segmentedControl = UISegmentedControl(first: "Male", second: "Femail")
     
+    private var keyboardObserver: KeyboardObserver?
+    
     // MARK: - viewDidLaod
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        
+        settingDelegateAndObserver()
         setupConstaints()
         addTargetButtons()
+    }
+    
+    deinit {
+        keyboardObserver?.cancelForKeybourdNotification()
     }
 }
 
 // MARK: - Private method
 extension SetupProfileViewController {
+    
+    private func settingDelegateAndObserver() {
+        keyboardObserver = KeyboardObserver(viewController: self, lastViewInViewController: cancelButton)
+        keyboardObserver?.registerForKeybourdNotification()
+    }
+    
     private func setupConstaints() {
         
         view.addSubview(maiLabel)
@@ -62,11 +76,11 @@ extension SetupProfileViewController {
                                         axis: .vertical,
                                         spacing: 0)
         let aboutMeStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextField],
-                                        axis: .vertical,
-                                        spacing: 0)
+                                           axis: .vertical,
+                                           spacing: 0)
         let sexStackView = UIStackView(arrangedSubviews: [sexLabel, segmentedControl],
-                                        axis: .vertical,
-                                        spacing: 0)
+                                       axis: .vertical,
+                                       spacing: 0)
         let stackView = UIStackView(arrangedSubviews: [nameStackView, aboutMeStackView, sexStackView, goButton],
                                     axis: .vertical,
                                     spacing: 40)
@@ -112,9 +126,9 @@ extension SetupProfileViewController {
     @objc private func goButtonPress() {
         activiteIndecator.startAnimating()
         FirebaseService.shered.saveNewUser(username: usernameTextField.text,
-                                            description: aboutMeTextField.text,
-                                            sex: segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex),
-                                            avatarImage: choosePhoto.photo.image!)
+                                           description: aboutMeTextField.text,
+                                           sex: segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex),
+                                           avatarImage: choosePhoto.photo.image!)
         { result in
             switch result {
             case .success(let user):
@@ -148,7 +162,7 @@ extension SetupProfileViewController {
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true)
     }
-
+    
 }
 
 extension SetupProfileViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
@@ -163,6 +177,27 @@ extension SetupProfileViewController: UIImagePickerControllerDelegate & UINaviga
     }
 }
 
+
+
+// MARK: - UITextFieldDelegate
+extension SetupProfileViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+}
+
+// MARK: - Override function
+extension SetupProfileViewController {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            view.endEditing(true)
+        }
+        super.touchesBegan(touches, with: event)
+    }
+}
 
 
 

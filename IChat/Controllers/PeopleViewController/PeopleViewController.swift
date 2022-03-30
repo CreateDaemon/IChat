@@ -51,7 +51,7 @@ class PeopleViewController: UIViewController {
     }
     
     deinit {
-        listener!.remove()
+        listener?.remove()
     }
 }
 

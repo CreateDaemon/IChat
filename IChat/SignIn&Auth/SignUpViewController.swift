@@ -24,24 +24,40 @@ class SignUpViewController: UIViewController {
     private let logInButton = UIButton(titel: "Login", backgroundColor: .clear, titleColor: .buttonRed(), cornerRadius: 0)
     private let backButton = UIButton(titel: "Go to back", backgroundColor: .clear, titleColor: .buttonDark(), cornerRadius: 0)
     
+    private var keyboardObtherver: KeyboardObserver?
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        
+        settingDelegateAndObserver()
         setupConstraints()
         addTargetButtons()
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        keyboardObtherver?.cancelForKeybourdNotification()
     }
     
 }
 
 // MARK: - Private method
 extension SignUpViewController {
+    
+    private func settingDelegateAndObserver() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        confirmPasswordTextField.delegate = self
+        
+        passwordTextField.isSecureTextEntry = true
+        confirmPasswordTextField.isSecureTextEntry = true
+        
+        keyboardObtherver = KeyboardObserver(viewController: self, lastViewInViewController: backButton)
+        
+        keyboardObtherver?.registerForKeybourdNotification()
+    }
     
     private func setupConstraints() {
         view.addSubview(mainLabel)
@@ -130,6 +146,27 @@ extension SignUpViewController {
         SceneDelegate.shared.rootViewController.goToAuthViewController()
     }
     
+}
+
+
+// MARK: - UITextFieldDelegate
+extension SignUpViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+}
+
+// MARK: - Override function
+extension SignUpViewController {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            view.endEditing(true)
+        }
+        super.touchesBegan(touches, with: event)
+    }
 }
 
 

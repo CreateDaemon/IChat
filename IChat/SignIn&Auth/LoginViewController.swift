@@ -27,19 +27,37 @@ class LogInViewController: UIViewController {
     private let emailTextField = OneLineTextField()
     private let passwordTextField = OneLineTextField()
     
+    private var keyboardObserver: KeyboardObserver?
+    
     // MARK: - viewDidLaod
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        googleButtom.customGoogleButton()
         view.backgroundColor = .white
+        googleButtom.customGoogleButton()
+        
+        settingDelegateAndObserver()
         setupConstraints()
         addTargetButtons()
+    }
+    
+    deinit {
+        keyboardObserver?.cancelForKeybourdNotification()
     }
 }
 
 // MARK: - Private method
 extension LogInViewController {
+    
+    private func settingDelegateAndObserver() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        passwordTextField.isSecureTextEntry = true
+        
+        keyboardObserver = KeyboardObserver(viewController: self, lastViewInViewController: backButton)
+        keyboardObserver?.registerForKeybourdNotification()
+    }
     
     private func setupConstraints() {
         
@@ -118,10 +136,10 @@ extension LogInViewController {
     
     @objc private func logInButtonPress() {
         activiteIndecator.startAnimating()
-        AuthService.shered.signIn(email: emailTextField.text!, password: passwordTextField.text!) { result in
+        AuthService.shered.signIn(email: emailTextField.text, password: passwordTextField.text) { result in
             switch result {
             case .success(let user):
-                FirebaseSourvice.shered.getUserData(with: user.uid) { [unowned self] result in
+                FirebaseService.shered.getUserData(with: user.uid) { [unowned self] result in
                     self.showAlert(title: "Completion", message: "Email: \(user.email ?? "none")")
                     switch result {
                     case .success(let user):
@@ -153,7 +171,7 @@ extension LogInViewController {
         AuthService.shered.signInWithGoogle(viewController: self) { [unowned self] result in
             switch result {
             case .success(let user):
-                FirebaseSourvice.shered.getUserData(with: user.uid) { result in
+                FirebaseService.shered.getUserData(with: user.uid) { result in
                     switch result {
                     case .success(let user):
                         activiteIndecator.stopAnimating()
@@ -167,5 +185,26 @@ extension LogInViewController {
                 activiteIndecator.stopAnimating()
             }
         }
+    }
+}
+
+
+// MARK: - UITextFieldDelegate
+extension LogInViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+}
+
+// MARK: - Override function
+extension LogInViewController {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            view.endEditing(true)
+        }
+        super.touchesBegan(touches, with: event)
     }
 }
