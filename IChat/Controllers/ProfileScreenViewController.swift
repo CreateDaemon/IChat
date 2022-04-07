@@ -13,6 +13,8 @@ class ProfileScreenViewController: UIViewController {
     private let sender: MUser
     private let receiver: MUser
     
+    private var keyboardObserver: KeyboardObserver?
+    
     private var imageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -67,8 +69,17 @@ class ProfileScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textField.delegate = self
+        
         setupSubview()
         setupButtonInRightViewTextField()
+        
+        keyboardObserver = KeyboardObserver(viewController: self, lastViewInViewController: containerView)
+        keyboardObserver?.registerForKeybourdNotification()
+    }
+    
+    deinit {
+        keyboardObserver?.cancelForKeybourdNotification()
     }
 }
 
@@ -153,3 +164,22 @@ extension ProfileScreenViewController {
     }
 }
 
+// MARK: - UITextFieldDelegate
+extension ProfileScreenViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+}
+
+// MARK: - Override function
+extension ProfileScreenViewController {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            view.endEditing(true)
+        }
+        super.touchesBegan(touches, with: event)
+    }
+}
